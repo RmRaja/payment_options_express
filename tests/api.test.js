@@ -8,6 +8,21 @@ const db = new sqlite3.Database(':memory:');
 const app = require('../src/app')(db);
 const buildSchemas = require('../src/schemas');
 
+function createRide() {
+  return request(app)
+    .post('/rides')
+    .send({
+      start_lat: 1,
+      start_long: 1,
+      end_lat: 2,
+      end_long: 2,
+      rider_name: 'test',
+      driver_name: 'test',
+      driver_vehicle: 'test',
+    })
+    .expect('Content-Type', /json/);
+}
+
 describe('API tests', () => {
   before((done) => {
     db.serialize((err) => {
@@ -54,19 +69,7 @@ describe('API tests', () => {
    */
   describe('POST /rides', () => {
     it('Create Ride returns 200', (done) => {
-      request(app)
-        .post('/rides')
-        .send({
-          start_lat: 1,
-          start_long: 2,
-          end_lat: 3,
-          end_long: 4,
-          rider_name: 'test',
-          driver_name: 'test',
-          driver_vehicle: 'test',
-        })
-        .expect('Content-Type', /json/)
-        .expect(200, done);
+      createRide().expect(200, done);
     });
   });
 
@@ -230,7 +233,6 @@ describe('API tests', () => {
           expect(res.body?.length).to.equal(1);
         });
     });
-    expect();
   });
 
   /**
