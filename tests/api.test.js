@@ -258,4 +258,16 @@ describe('API tests', () => {
         .expect(404, done);
     });
   });
+
+  /**
+   * Mocha test to test SQL injection fix
+   */
+  describe('GET /rides/:id', () => {
+    it('Get Ride By Id with SQL injection', (done) => {
+      request(app)
+        .get('/rides/1%20OR%201%3D1')
+        .expect('Content-Type', /json/)
+        .expect(404, done);
+    });
+  }); 
 });

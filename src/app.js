@@ -154,8 +154,11 @@ module.exports = (db) => {
   });
 
   app.get('/rides/:id', (req, res) => {
+    const id = req.params.id;
+    const sql = 'SELECT * FROM Rides WHERE rideID = ?';
     db.all(
-      `SELECT * FROM Rides WHERE rideID='${req.params.id}'`,
+      sql,
+      [id],
       function (err, rows) {
         if (err) {
           return res.status(500).send({
